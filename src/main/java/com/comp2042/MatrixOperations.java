@@ -14,6 +14,7 @@ public class MatrixOperations {
 
     }
 
+    //checks if a brick overlaps with the board or goes out of bounds at (x,y)
     public static boolean intersect(final int[][] matrix, final int[][] brick, int x, int y) {
         for (int i = 0; i < brick.length; i++) {
             for (int j = 0; j < brick[i].length; j++) {
@@ -27,6 +28,7 @@ public class MatrixOperations {
         return false;
     }
 
+    //helper method to check if a position is outside the board
     private static boolean checkOutOfBound(int[][] matrix, int targetX, int targetY) {
         boolean returnValue = true;
         if (targetX >= 0 && targetY < matrix.length && targetX < matrix[targetY].length) {
@@ -46,6 +48,7 @@ public class MatrixOperations {
         return myInt;
     }
 
+    //merges a brick into the board at (x,y)
     public static int[][] merge(int[][] filledFields, int[][] brick, int x, int y) {
         int[][] copy = copy(filledFields);
         for (int i = 0; i < brick.length; i++) {
@@ -60,6 +63,7 @@ public class MatrixOperations {
         return copy;
     }
 
+    //checks for filled rows in the board and removes them, returns the number of cleared rows and the new board
     public static ClearRow checkRemoving(final int[][] matrix) {
         int[][] tmp = new int[matrix.length][matrix[0].length];
         Deque<int[]> newRows = new ArrayDeque<>();

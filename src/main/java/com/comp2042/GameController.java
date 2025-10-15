@@ -1,7 +1,10 @@
 package com.comp2042;
 
+//coordinates main game logic. bridge between user actions and game state updates
 public class GameController implements InputEventListener {
 
+    //creates new game board with 25 rows and 10 columns
+    //can change to higher height next time(?)
     private Board board = new SimpleBoard(25, 10);
 
     private final GuiController viewGuiController;
@@ -15,8 +18,8 @@ public class GameController implements InputEventListener {
     }
 
     @Override
-    public DownData onDownEvent(MoveEvent event) {
-        boolean canMove = board.moveBrickDown();
+    public DownData onDownEvent(MoveEvent event) { //handles the event when a piece moves down
+        boolean canMove = board.moveBrickDown(); //tries to move the piece down, returns false if it can't
         ClearRow clearRow = null;
         if (!canMove) {
             board.mergeBrickToBackground();
@@ -24,15 +27,15 @@ public class GameController implements InputEventListener {
             if (clearRow.getLinesRemoved() > 0) {
                 board.getScore().add(clearRow.getScoreBonus());
             }
-            if (board.createNewBrick()) {
+            if (board.createNewBrick()) { //tries to create a new brick, if cant, then game over
                 viewGuiController.gameOver();
             }
 
-            viewGuiController.refreshGameBackground(board.getBoardMatrix());
+            viewGuiController.refreshGameBackground(board.getBoardMatrix()); //updates the GUI with new board state
 
         } else {
-            if (event.getEventSource() == EventSource.USER) {
-                board.getScore().add(1);
+            if (event.getEventSource() == EventSource.USER) {  //if the move was triggered by user
+                board.getScore().add(1); //add 1 point for user
             }
         }
         return new DownData(clearRow, board.getViewData());

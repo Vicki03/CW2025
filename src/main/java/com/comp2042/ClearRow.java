@@ -2,8 +2,8 @@ package com.comp2042;
 
 public final class ClearRow {
 
-    private final int linesRemoved;
-    private final int[][] newMatrix;
+    private final int linesRemoved; //maybe can display linesRemoved in the future
+    private final int[][] newMatrix; //shows the new matrix after clearing the rows
     private final int scoreBonus;
 
     public ClearRow(int linesRemoved, int[][] newMatrix, int scoreBonus) {
@@ -14,7 +14,7 @@ public final class ClearRow {
 
     public int getLinesRemoved() {
         return linesRemoved;
-    }
+    } //getter for no. lines removed
 
     public int[][] getNewMatrix() {
         return MatrixOperations.copy(newMatrix);

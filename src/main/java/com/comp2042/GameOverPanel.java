@@ -3,7 +3,7 @@ package com.comp2042;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 
-
+//this is an overlay, not a separate screen
 public class GameOverPanel extends BorderPane {
 
     public GameOverPanel() {

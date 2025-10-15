@@ -1,11 +1,12 @@
 package com.comp2042;
 
+//stores current brick's shape and position, and the next brick's shape
 public final class ViewData {
 
-    private final int[][] brickData;
-    private final int xPosition;
+    private final int[][] brickData; //2D array for current brick's shape
+    private final int xPosition; //current brick's x position
     private final int yPosition;
-    private final int[][] nextBrickData;
+    private final int[][] nextBrickData; //2D array for next brick's shape
 
     public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData) {
         this.brickData = brickData;

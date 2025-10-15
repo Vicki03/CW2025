@@ -23,6 +23,8 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+//manages GUI, handles user input, updates the display of game board and current brick
+//shows notifs for scoring, controls game over and new game states
 public class GuiController implements Initializable {
 
     private static final int BRICK_SIZE = 20;
@@ -39,12 +41,15 @@ public class GuiController implements Initializable {
     @FXML
     private GameOverPanel gameOverPanel;
 
+    //stores rectangles representing game board
     private Rectangle[][] displayMatrix;
 
     private InputEventListener eventListener;
 
+    //stores rectangles for the current block
     private Rectangle[][] rectangles;
 
+    //controls automatic piece movement
     private Timeline timeLine;
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
@@ -82,6 +87,7 @@ public class GuiController implements Initializable {
                 }
             }
         });
+        //hide game over panel in the beginning
         gameOverPanel.setVisible(false);
 
         final Reflection reflection = new Reflection();
@@ -90,6 +96,7 @@ public class GuiController implements Initializable {
         reflection.setTopOffset(-12);
     }
 
+    //initializes game board and current brick display
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
         for (int i = 2; i < boardMatrix.length; i++) {
@@ -122,6 +129,7 @@ public class GuiController implements Initializable {
         timeLine.play();
     }
 
+    //returns a color based on integer value
     private Paint getFillColor(int i) {
         Paint returnPaint;
         switch (i) {
@@ -157,6 +165,7 @@ public class GuiController implements Initializable {
     }
 
 
+    //update the brick's position and color in the UI
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
             brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
@@ -169,6 +178,7 @@ public class GuiController implements Initializable {
         }
     }
 
+    //update the game board display
     public void refreshGameBackground(int[][] board) {
         for (int i = 2; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -177,12 +187,14 @@ public class GuiController implements Initializable {
         }
     }
 
+    //set the colot and rounded corners of a rectangle
     private void setRectangleData(int color, Rectangle rectangle) {
         rectangle.setFill(getFillColor(color));
         rectangle.setArcHeight(9);
         rectangle.setArcWidth(9);
     }
 
+    //handles the moving brick down
     private void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onDownEvent(event);
@@ -196,10 +208,12 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
 
+    //sets event listener for game logic
     public void setEventListener(InputEventListener eventListener) {
         this.eventListener = eventListener;
     }
 
+    //placeholder for score binding
     public void bindScore(IntegerProperty integerProperty) {
     }
 
@@ -209,6 +223,7 @@ public class GuiController implements Initializable {
         isGameOver.setValue(Boolean.TRUE);
     }
 
+    //implement replay button later
     public void newGame(ActionEvent actionEvent) {
         timeLine.stop();
         gameOverPanel.setVisible(false);
@@ -219,6 +234,7 @@ public class GuiController implements Initializable {
         isGameOver.setValue(Boolean.FALSE);
     }
 
+    //implement the pause game feature later
     public void pauseGame(ActionEvent actionEvent) {
         gamePanel.requestFocus();
     }

@@ -1,5 +1,8 @@
 package com.comp2042;
 
+//interface for handling game input events.
+//means methods that must be implemented by any class that wants to handle input events in the game.
+
 public interface InputEventListener {
 
     DownData onDownEvent(MoveEvent event);
