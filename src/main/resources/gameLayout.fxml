@@ -18,6 +18,7 @@
     <Group fx:id="groupNotification" layoutX="14" layoutY="203">
         <VBox alignment="CENTER">
             <GameOverPanel fx:id="gameOverPanel"/>
+            <Button fx:id="replayButton" text="Replay" onAction="#newGame" layoutX ="10" layoutY = "50"/>
         </VBox>
     </Group>
     <stylesheets>

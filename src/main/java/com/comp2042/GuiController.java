@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -40,6 +41,10 @@ public class GuiController implements Initializable {
 
     @FXML
     private GameOverPanel gameOverPanel;
+
+    //added replay button
+    @FXML
+    private Button replayButton;
 
     //stores rectangles representing game board
     private Rectangle[][] displayMatrix;
@@ -87,6 +92,8 @@ public class GuiController implements Initializable {
                 }
             }
         });
+        //hide replay button at the start
+        replayButton.setVisible(false);
         //hide game over panel in the beginning
         gameOverPanel.setVisible(false);
 
@@ -221,12 +228,14 @@ public class GuiController implements Initializable {
         timeLine.stop();
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
+        replayButton.setVisible(true); //show replay button when the game is over
     }
 
     //implement replay button later
     public void newGame(ActionEvent actionEvent) {
         timeLine.stop();
         gameOverPanel.setVisible(false);
+        replayButton.setVisible(false); //hide replay button when starting a new game
         eventListener.createNewGame();
         gamePanel.requestFocus();
         timeLine.play();
