@@ -6,22 +6,31 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
-<Pane fx:controller="com.comp2042.GuiController"
-      xmlns:fx="http://javafx.com/fxml">
-    <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-    <BorderPane styleClass="gameBoard" fx:id="gameBoard">
-        <center>
-            <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
-        </center>
-    </BorderPane>
+<?import javafx.geometry.Insets?>
 
-    <Group fx:id="groupNotification" layoutX="14" layoutY="203">
-        <VBox alignment="CENTER">
-            <GameOverPanel fx:id="gameOverPanel"/>
-            <Button fx:id="replayButton" text="Replay" onAction="#newGame" layoutX ="10" layoutY = "50"/>
-        </VBox>
-    </Group>
+<StackPane fx:controller="com.comp2042.GuiController"
+      xmlns:fx="http://javafx.com/fxml"> <!-- Use StackPana when wanna layer components -->
+    <Pane>
+        <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
+        <BorderPane styleClass="gameBoard" fx:id="gameBoard">
+            <center>
+                <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
+            </center>
+        </BorderPane>
+        <Group fx:id="groupNotification" layoutX="14" layoutY="203">
+            <VBox alignment="CENTER">
+                <GameOverPanel fx:id="gameOverPanel"/>
+                <Button fx:id="replayButton" text="Replay" onAction="#newGame" layoutX ="10" layoutY = "50"/>
+            </VBox>
+        </Group>
+    </Pane>
+    <HBox StackPane.alignment="TOP_RIGHT" alignment = "CENTER_RIGHT" pickOnBounds = "false">
+        <padding>
+            <Insets top="10" right="10" bottom="500" left="10"/>
+        </padding>
+        <Button fx:id="pauseButton" text="Pause" onAction="#pauseGame"/>
+    </HBox>
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
-</Pane>
+</StackPane>

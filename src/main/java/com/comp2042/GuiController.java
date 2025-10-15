@@ -46,6 +46,10 @@ public class GuiController implements Initializable {
     @FXML
     private Button replayButton;
 
+    //added pause button
+    @FXML
+    private Button pauseButton;
+
     //stores rectangles representing game board
     private Rectangle[][] displayMatrix;
 
@@ -228,7 +232,9 @@ public class GuiController implements Initializable {
         timeLine.stop();
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
-        replayButton.setVisible(true); //show replay button when the game is over
+        replayButton.setVisible(true); //show replay button when
+        replayButton.setDisable(false); //enable replay button
+        pauseButton.setDisable(true); //disable pause button
     }
 
     //implement replay button later
@@ -236,15 +242,30 @@ public class GuiController implements Initializable {
         timeLine.stop();
         gameOverPanel.setVisible(false);
         replayButton.setVisible(false); //hide replay button when starting a new game
-        eventListener.createNewGame();
+        eventListener.createNewGame(); //reset game state
         gamePanel.requestFocus();
         timeLine.play();
         isPause.setValue(Boolean.FALSE);
         isGameOver.setValue(Boolean.FALSE);
+        pauseButton.setText("Pause");
+        pauseButton.setDisable(false); //enable pause button
     }
 
     //implement the pause game feature later
     public void pauseGame(ActionEvent actionEvent) {
         gamePanel.requestFocus();
+        if(isGameOver.getValue()){
+            return; //do nothing when game is over
+        }
+        if(isPause.getValue()){
+            //resume
+            timeLine.play();
+            isPause.setValue(false);
+            pauseButton.setText("Pause");
+        } else{
+            timeLine.pause();
+            isPause.setValue(true);
+            pauseButton.setText("Resume");
+        }
     }
 }
