@@ -1,7 +1,4 @@
-package com.comp2042;
-
-import com.comp2042.tetris.events.EventSource;
-import com.comp2042.tetris.events.EventType;
+package com.comp2042.tetris.events;
 
 public final class MoveEvent {
     private final EventType eventType;
