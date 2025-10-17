@@ -1,5 +1,6 @@
-package com.comp2042;
+package com.comp2042.tetris.controller;
 
+import com.comp2042.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;

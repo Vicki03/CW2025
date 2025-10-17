@@ -1,7 +1,7 @@
 package com.comp2042.tetris.application;
 
 import com.comp2042.GameController;
-import com.comp2042.GuiController;
+import com.comp2042.tetris.controller.GuiController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

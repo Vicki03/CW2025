@@ -8,7 +8,7 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 
-<StackPane fx:controller="com.comp2042.GuiController"
+<StackPane fx:controller="com.comp2042.tetris.controller.GuiController"
       xmlns:fx="http://javafx.com/fxml"> <!-- Use StackPana when wanna layer components -->
     <Pane>
         <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
