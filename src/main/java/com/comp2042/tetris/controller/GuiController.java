@@ -3,6 +3,7 @@ package com.comp2042.tetris.controller;
 import com.comp2042.*;
 import com.comp2042.tetris.events.EventSource;
 import com.comp2042.tetris.events.EventType;
+import com.comp2042.tetris.events.InputEventListener;
 import com.comp2042.tetris.model.DownData;
 import com.comp2042.tetris.view.GameOverPanel;
 import javafx.animation.KeyFrame;
