@@ -1,6 +1,6 @@
 package com.comp2042.tetris.model.rules;
 
-import com.comp2042.NextShapeInfo;
+import com.comp2042.tetris.model.NextShapeInfo;
 import com.comp2042.logic.bricks.Brick;
 
 public class BrickRotator {
