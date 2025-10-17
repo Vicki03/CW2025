@@ -5,6 +5,7 @@ import com.comp2042.logic.bricks.Brick;
 import com.comp2042.logic.bricks.BrickGenerator;
 import com.comp2042.logic.bricks.RandomBrickGenerator;
 import com.comp2042.tetris.model.rules.BrickRotator;
+import com.comp2042.tetris.util.MatrixOperations;
 
 import java.awt.*;
 

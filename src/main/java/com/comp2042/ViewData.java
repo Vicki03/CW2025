@@ -1,5 +1,7 @@
 package com.comp2042;
 
+import com.comp2042.tetris.util.MatrixOperations;
+
 //stores current brick's shape and position, and the next brick's shape
 public final class ViewData {
 

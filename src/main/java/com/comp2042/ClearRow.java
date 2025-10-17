@@ -1,5 +1,7 @@
 package com.comp2042;
 
+import com.comp2042.tetris.util.MatrixOperations;
+
 public final class ClearRow {
 
     private final int linesRemoved; //maybe can display linesRemoved in the future
