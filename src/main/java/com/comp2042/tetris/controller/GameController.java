@@ -1,6 +1,6 @@
-package com.comp2042;
+package com.comp2042.tetris.controller;
 
-import com.comp2042.tetris.controller.GuiController;
+import com.comp2042.*;
 
 //coordinates main game logic. bridge between user actions and game state updates
 public class GameController implements InputEventListener {
