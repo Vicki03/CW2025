@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
+out/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -12,6 +13,8 @@ target/
 *.iws
 *.iml
 *.ipr
+.idea/
+
 
 ### Eclipse ###
 .apt_generated

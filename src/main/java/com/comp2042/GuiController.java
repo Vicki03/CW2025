@@ -23,6 +23,7 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.Label;
 
 //manages GUI, handles user input, updates the display of game board and current brick
 //shows notifs for scoring, controls game over and new game states
@@ -49,6 +50,10 @@ public class GuiController implements Initializable {
     //added pause button
     @FXML
     private Button pauseButton;
+
+    //added scoreLabel
+    @FXML
+    private Label scoreLabel;
 
     //stores rectangles representing game board
     private Rectangle[][] displayMatrix;
@@ -224,15 +229,19 @@ public class GuiController implements Initializable {
         this.eventListener = eventListener;
     }
 
-    //placeholder for score binding
+    //i think this connects to the game score and then updates the score automatically in the ui
     public void bindScore(IntegerProperty integerProperty) {
+        if (integerProperty == null || scoreLabel == null){
+            return;
+        }
+        scoreLabel.textProperty().bind(integerProperty.asString());
     }
 
     public void gameOver() {
         timeLine.stop();
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
-        replayButton.setVisible(true); //show replay button when
+        replayButton.setVisible(true); //show replay button when game is over
         replayButton.setDisable(false); //enable replay button
         pauseButton.setDisable(true); //disable pause button
     }

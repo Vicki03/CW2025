@@ -21,14 +21,20 @@
             <VBox alignment="CENTER">
                 <GameOverPanel fx:id="gameOverPanel"/>
                 <Button fx:id="replayButton" text="Replay" onAction="#newGame" layoutX ="10" layoutY = "50"/>
+
             </VBox>
         </Group>
     </Pane>
     <HBox StackPane.alignment="TOP_RIGHT" alignment = "CENTER_RIGHT" pickOnBounds = "false">
         <padding>
-            <Insets top="10" right="10" bottom="500" left="10"/>
+            <Insets top="10" right="10" bottom="10" left="10"/>
         </padding>
-        <Button fx:id="pauseButton" text="Pause" onAction="#pauseGame"/>
+        <VBox spacing ="10">
+            <Button fx:id="pauseButton" text="Pause" onAction="#pauseGame"/>
+            <Label fx:id="scoreLabel" text = "Score: 0"
+            style = "-fx-text-fill:white; -fx-font-size: 16px; -fx-font-weight: bold;
+            -fx-background-color: rgba(0,0,0,0.35); -fx-padding: 4 8;"/>
+        </VBox>
     </HBox>
     <stylesheets>
         <URL value="@window_style.css"/>
