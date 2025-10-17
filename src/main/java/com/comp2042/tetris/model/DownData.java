@@ -1,7 +1,5 @@
 package com.comp2042.tetris.model;
 
-import com.comp2042.ViewData;
-
 //data class to hold information about cleared rows and the current view state
 public final class DownData {
     private final ClearRow clearRow;

@@ -1,13 +1,9 @@
 package com.comp2042.tetris.controller;
 
-import com.comp2042.*;
 import com.comp2042.tetris.events.EventSource;
 import com.comp2042.tetris.events.InputEventListener;
 import com.comp2042.tetris.events.MoveEvent;
-import com.comp2042.tetris.model.Board;
-import com.comp2042.tetris.model.ClearRow;
-import com.comp2042.tetris.model.DownData;
-import com.comp2042.tetris.model.SimpleBoard;
+import com.comp2042.tetris.model.*;
 
 //coordinates main game logic. bridge between user actions and game state updates
 public class GameController implements InputEventListener {
