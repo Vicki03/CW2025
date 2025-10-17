@@ -1,6 +1,7 @@
 package com.comp2042;
 
 import com.comp2042.tetris.events.EventSource;
+import com.comp2042.tetris.events.EventType;
 
 public final class MoveEvent {
     private final EventType eventType;
