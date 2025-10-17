@@ -7,6 +7,7 @@ import com.comp2042.tetris.events.InputEventListener;
 import com.comp2042.tetris.events.MoveEvent;
 import com.comp2042.tetris.model.DownData;
 import com.comp2042.tetris.view.GameOverPanel;
+import com.comp2042.tetris.view.NotificationPanel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
