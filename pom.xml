@@ -50,7 +50,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.comp2042.Main</mainClass>
+                    <mainClass>com.comp2042.tetris.application.Main</mainClass>
                 </configuration>
             </plugin>
 
