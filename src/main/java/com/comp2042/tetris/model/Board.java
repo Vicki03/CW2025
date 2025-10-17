@@ -1,6 +1,5 @@
 package com.comp2042.tetris.model;
 
-import com.comp2042.ClearRow;
 import com.comp2042.Score;
 import com.comp2042.ViewData;
 

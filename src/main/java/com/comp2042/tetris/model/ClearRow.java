@@ -1,4 +1,4 @@
-package com.comp2042;
+package com.comp2042.tetris.model;
 
 import com.comp2042.tetris.util.MatrixOperations;
 

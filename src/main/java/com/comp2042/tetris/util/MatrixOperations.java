@@ -1,6 +1,6 @@
 package com.comp2042.tetris.util;
 
-import com.comp2042.ClearRow;
+import com.comp2042.tetris.model.ClearRow;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

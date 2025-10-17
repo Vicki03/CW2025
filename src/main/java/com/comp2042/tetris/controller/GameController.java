@@ -2,6 +2,7 @@ package com.comp2042.tetris.controller;
 
 import com.comp2042.*;
 import com.comp2042.tetris.model.Board;
+import com.comp2042.tetris.model.ClearRow;
 import com.comp2042.tetris.model.SimpleBoard;
 
 //coordinates main game logic. bridge between user actions and game state updates
