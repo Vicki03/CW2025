@@ -5,12 +5,16 @@ import com.comp2042.tetris.events.InputEventListener;
 import com.comp2042.tetris.events.MoveEvent;
 import com.comp2042.tetris.model.*;
 
-//coordinates main game logic. bridge between user actions and game state updates
-public class GameController implements InputEventListener {
+/**
+ *Acts as the main game coordinator.
+ *Connects the GUI and the underlying game model.
+ *Implements InputEventListener to respond to player and timer inputs.
+ */
+public final class GameController implements InputEventListener {
 
     //creates new game board with 25 rows and 10 columns
     //can change to higher height next time(?)
-    private Board board = new GameBoard(25, 10);
+    private final Board board = new GameBoard(25, 10);
 
     private final GuiController viewGuiController;
 
