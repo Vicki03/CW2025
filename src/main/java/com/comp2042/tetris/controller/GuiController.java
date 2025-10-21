@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -211,7 +212,7 @@ public class GuiController implements Initializable {
         }
     }
 
-    //set the colot and rounded corners of a rectangle
+    //set the color and rounded corners of a rectangle
     private void setRectangleData(int color, Rectangle rectangle) {
         rectangle.setFill(getFillColor(color));
         rectangle.setArcHeight(9);
@@ -237,7 +238,7 @@ public class GuiController implements Initializable {
         this.eventListener = eventListener;
     }
 
-    //i think this connects to the game score and then updates the score automatically in the ui
+    //I think this connects to the game score and then updates the score automatically in the ui
     public void bindScore(IntegerProperty integerProperty) {
         if (integerProperty == null || scoreLabel == null){
             return;
@@ -255,7 +256,7 @@ public class GuiController implements Initializable {
     }
 
     //implement replay button later
-    public void newGame(ActionEvent actionEvent) {
+    public void newGame(ActionEvent _actionEvent) {
         timeLine.stop();
         gameOverPanel.setVisible(false);
         replayButton.setVisible(false); //hide replay button when starting a new game

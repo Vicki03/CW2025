@@ -1,7 +1,7 @@
 package com.comp2042.tetris.model.rules;
 
 import com.comp2042.tetris.model.NextShapeInfo;
-import com.comp2042.logic.bricks.Brick;
+import com.comp2042.tetris.model.brick.Brick;
 
 public class BrickRotator {
 
@@ -10,7 +10,7 @@ public class BrickRotator {
 
     //method to get next rotation index of the Brick object
     public NextShapeInfo getNextShape() {
-        int nextShape = currentShape;
+        int nextShape = currentShape; //change redundancy later
         nextShape = (++nextShape) % brick.getShapeMatrix().size(); //increment nextShape and wrap around
         return new NextShapeInfo(brick.getShapeMatrix().get(nextShape), nextShape); //return next shape matrix and index
     }

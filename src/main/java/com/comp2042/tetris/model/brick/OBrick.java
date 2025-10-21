@@ -1,4 +1,4 @@
-package com.comp2042.logic.bricks;
+package com.comp2042.tetris.model.brick;
 
 import com.comp2042.tetris.util.MatrixOperations;
 

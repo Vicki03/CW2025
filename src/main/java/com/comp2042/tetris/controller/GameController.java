@@ -10,7 +10,7 @@ public class GameController implements InputEventListener {
 
     //creates new game board with 25 rows and 10 columns
     //can change to higher height next time(?)
-    private Board board = new SimpleBoard(25, 10);
+    private Board board = new GameBoard(25, 10);
 
     private final GuiController viewGuiController;
 

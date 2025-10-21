@@ -1,15 +1,15 @@
 package com.comp2042.tetris.model;
 
-import com.comp2042.logic.bricks.Brick;
-import com.comp2042.logic.bricks.BrickGenerator;
-import com.comp2042.logic.bricks.RandomBrickGenerator;
+import com.comp2042.tetris.model.brick.Brick;
+import com.comp2042.tetris.model.brick.BrickGenerator;
+import com.comp2042.tetris.model.brick.RandomBrickGenerator;
 import com.comp2042.tetris.model.rules.BrickRotator;
 import com.comp2042.tetris.util.MatrixOperations;
 
 import java.awt.*;
 
 //manages game state including board matrix, current brick, score, and game logic
-public class SimpleBoard implements Board {
+public class GameBoard implements Board {
 
     private final int width;
     private final int height;
@@ -20,7 +20,7 @@ public class SimpleBoard implements Board {
     private final Score score;
 
     //declares board dimensions, initializes game matrix, brick generator, rotator, and score
-    public SimpleBoard(int width, int height) {
+    public GameBoard(int width, int height) {
         this.width = width;
         this.height = height;
         currentGameMatrix = new int[width][height];

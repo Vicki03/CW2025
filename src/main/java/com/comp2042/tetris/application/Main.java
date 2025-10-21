@@ -16,17 +16,16 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
-        ResourceBundle resources = null;
-        FXMLLoader fxmlLoader = new FXMLLoader(location, resources);
-        Parent root = fxmlLoader.load();
-        GuiController c = fxmlLoader.getController();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
+        Parent root = loader.load();
+
+        GuiController guiController = loader.getController();
+        new GameController(guiController);
 
         primaryStage.setTitle("TetrisJFX");
-        Scene scene = new Scene(root, 300, 510);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(new Scene(root, 300, 510));
         primaryStage.show();
-        new GameController(c);
+
     }
 
 
