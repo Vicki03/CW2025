@@ -66,6 +66,10 @@ public final class GuiController implements Initializable {
     @FXML
     private Label scoreLabel;
 
+    //added levelLabel
+    @FXML
+    private Label levelLabel;
+
     //stores rectangles representing game board
     /**Rectangle matrix for the game board display*/
     private Rectangle[][] displayMatrix;
@@ -147,13 +151,7 @@ public final class GuiController implements Initializable {
         brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
         brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
 
-
-        timeLine = new Timeline(new KeyFrame(
-                Duration.millis(400),
-                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
-        ));
-        timeLine.setCycleCount(Timeline.INDEFINITE);
-        timeLine.play();
+        setGravityMs(400); //default gravity speed
     }
 
     //returns a color based on integer value
@@ -227,6 +225,26 @@ public final class GuiController implements Initializable {
             return;
         }
         scoreLabel.textProperty().bind(integerProperty.asString());
+    }
+
+    //change speed of the piece drops
+    public void setGravityMs(int ms){
+        if(timeLine != null){
+            timeLine.stop();
+        }
+        timeLine = new Timeline(new KeyFrame(
+                Duration.millis(ms),
+                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+        ));
+        timeLine.setCycleCount(Timeline.INDEFINITE);
+        timeLine.play();
+    }
+
+    //displays the current level in the ui
+    public void showLevel(int level) {
+        if (levelLabel != null) {
+            levelLabel.setText("Level: " + level);
+        }
     }
 
     public void gameOver() {
