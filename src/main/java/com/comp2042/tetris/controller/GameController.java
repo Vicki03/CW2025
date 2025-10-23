@@ -49,7 +49,6 @@ public final class GameController implements InputEventListener {
                 viewGuiController.showLevelUpNotification(level);
                 currentLevel = level;
             }
-            //viewGuiController.showLevel(levelService.levelForScore(s));
         };
         //attach the listener
         board.getScore().scoreProperty().addListener(scoreListener);
@@ -76,6 +75,39 @@ public final class GameController implements InputEventListener {
                 board.getScore().add(1); //add 1 point for user
             }
         }
+        return new DownData(clearRow, board.getViewData());
+    }
+
+    /**
+     * Hard drop implementation: move piece down until it cannot move,
+     * award drop bonus, merge, clear rows, and spawn next brick.
+     */
+    @Override
+    public DownData onHardDropEvent(MoveEvent event) {
+        // count how many cells the piece falls
+        int droppedCells = 0;
+        while (board.moveBrickDown()) {
+            droppedCells++;
+        }
+
+        //apply bonus for the hard drop
+        if (droppedCells > 0 && event.getEventSource() == EventSource.USER) {
+            board.getScore().add(droppedCells * 2); //2 points per cell
+        }
+
+        //finalize position
+        board.mergeBrickToBackground();
+        ClearRow clearRow = board.clearRows();
+        if (clearRow.getLinesRemoved() > 0) {
+            board.getScore().add(clearRow.getScoreBonus());
+        }
+
+        if (board.createNewBrick()) {
+            viewGuiController.gameOver();
+        }
+
+        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+
         return new DownData(clearRow, board.getViewData());
     }
 
