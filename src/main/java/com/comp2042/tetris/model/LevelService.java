@@ -5,24 +5,24 @@ import java.util.TreeMap;
 
 /** Maps score thresholds to gravity (milliseconds between auto-drops). */
 public final class LevelService {
-    private final NavigableMap<Integer, Integer> gravityByScore = new TreeMap<>();
-    private final int minGravityMs;
-
-    //tuned using the 0.8 multiplier from the NES Tetris
-    public LevelService() {
-        gravityByScore.put(0,     400); // Level 1 (modified 800 -> 400 for better starting speed)
-        gravityByScore.put(1000,  320); // Level 2
-        gravityByScore.put(1500,  260); // Level 3
-        gravityByScore.put(2000,  200); // Level 4
-        this.minGravityMs = 120;        // safety cap
-    }
+    private final int firstLevelThreshold = 1000;
+    private final int subsequentStep = 500; //step for subsequent levels
+    private final int baseGravityMs = 400; //base gravity for level 1
+    private final int decrementPerLevelMs = 30; //gravity decrement per level
+    private final int minGravityMs = 120;
 
     /** ms between drops for a given score. */
-    public int gravityMsForScore(int score) {
-        return Math.max(gravityByScore.floorEntry(score).getValue(), minGravityMs);
+    public int gravityMsForScore(int score){
+        int level = levelForScore(score);
+        int ms = baseGravityMs - (level - 1) * decrementPerLevelMs;
+        return Math.max(ms, minGravityMs);
     }
 
-    public int levelForScore(int score) {
-        return gravityByScore.headMap(score, true).size();
+    public int levelForScore(int score){
+        if(score < firstLevelThreshold){
+            return 1;
+        }
+        return 1 + ((score - firstLevelThreshold) / subsequentStep);
     }
+
 }

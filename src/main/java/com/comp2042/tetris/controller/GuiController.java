@@ -88,6 +88,9 @@ public final class GuiController implements Initializable {
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
+    private int currentLevel = 1;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
@@ -225,7 +228,7 @@ public final class GuiController implements Initializable {
         if (integerProperty == null || scoreLabel == null){
             return;
         }
-        scoreLabel.textProperty().bind(integerProperty.asString());
+        scoreLabel.textProperty().bind(integerProperty.asString("Score: %d"));
     }
 
     //change speed of the piece drops
@@ -247,6 +250,14 @@ public final class GuiController implements Initializable {
             levelLabel.setText("Level: " + level);
         }
     }
+
+    public void showLevelUpNotification(int newLevel) {
+        NotificationPanel levelUpPanel = new NotificationPanel("LEVEL " + newLevel + "!");
+        levelUpPanel.setLayoutY(-50);
+        groupNotification.getChildren().add(levelUpPanel);
+        levelUpPanel.showScore(groupNotification.getChildren());
+    }
+
 
     public void gameOver() {
         timeLine.stop();
@@ -287,5 +298,7 @@ public final class GuiController implements Initializable {
             isPause.setValue(true);
             pauseButton.setText("Resume");
         }
+
+
     }
 }

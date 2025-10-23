@@ -22,6 +22,8 @@ public final class GameController implements InputEventListener {
 
     private final LevelService levelService = new LevelService();
 
+    private int currentLevel = 1;
+
     public GameController(GuiController c) {
         viewGuiController = c;
         board.createNewBrick();
@@ -43,6 +45,10 @@ public final class GameController implements InputEventListener {
 
 
             //maybe add level display later
+            if(level > currentLevel){
+                viewGuiController.showLevelUpNotification(level);
+                currentLevel = level;
+            }
             //viewGuiController.showLevel(levelService.levelForScore(s));
         };
         //attach the listener
@@ -96,6 +102,7 @@ public final class GameController implements InputEventListener {
     public void createNewGame() {
         board.newGame();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        currentLevel = 1; //reset level tracker
         //reset gravity when a new game starts
         int g = levelService.gravityMsForScore(board.getScore().scoreProperty().get());
         viewGuiController.setGravityMs(g);
