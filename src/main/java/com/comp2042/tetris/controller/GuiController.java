@@ -121,6 +121,7 @@ public final class GuiController implements Initializable {
         //hide game over panel in the beginning
         gameOverPanel.setVisible(false);
 
+        //redundant reflection effect
         final Reflection reflection = new Reflection();
         reflection.setFraction(0.8);
         reflection.setTopOpacity(0.9);

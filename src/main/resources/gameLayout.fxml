@@ -37,7 +37,7 @@
                   -fx-background-color: rgba(0,0,0,0.35); -fx-padding: 4 8;" />
             <Label fx:id="levelLabel"
                    text="Level: 1"
-                   style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;
+                   style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                   -fx-background-color: rgba(0,0,0,0.35); -fx-padding: 4 8;" />
         </VBox>
 
