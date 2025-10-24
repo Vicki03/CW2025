@@ -51,6 +51,10 @@ public final class GuiController implements Initializable {
     @FXML
     private GridPane brickPanel;
 
+    //ghost layer (behind active brick)
+    @FXML
+    private GridPane ghostPanel;
+
     @FXML
     private GameOverPanel gameOverPanel;
 
@@ -78,6 +82,12 @@ public final class GuiController implements Initializable {
 
     /** Rectangles that render the active falling brick. */
     private Rectangle[][] rectangles;
+
+    /** Rectangle matrix for the ghost piece display */
+    private Rectangle[][] ghostRectangles;
+
+    //keep latest active brick viewdata for ghost computation
+    private ViewData currentBrickView;
 
     //controls automatic piece movement
     /** Automatic gravity (piece falls) timer. */
@@ -155,6 +165,19 @@ public final class GuiController implements Initializable {
             }
         }
 
+        //build ghost rectangles first (they will be behind active bricks)
+        ghostRectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
+        for(int i = 0; i< brick.getBrickData().length; i++){
+            for(int j = 0; j<brick.getBrickData()[i].length; j++){
+                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                rectangle.setFill(getFillColor(brick.getBrickData()[i][j]));
+                rectangle.setOpacity(0.25);
+                rectangle.setMouseTransparent(true);
+                ghostRectangles[i][j] = rectangle;
+                ghostPanel.add(rectangle, j, i);
+            }
+        }
+
         rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
@@ -164,8 +187,18 @@ public final class GuiController implements Initializable {
                 brickPanel.add(rectangle, j, i);
             }
         }
+
+        //cache current brick
+        currentBrickView = brick;
+
+        //position panels
         brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
         brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+
+        //ghost panel X matches active X; Y willbe set by renderGhost
+        ghostPanel.setLayoutX(brickPanel.getLayoutX());
+
+        renderGhost(currentBrickView);
 
         setGravityMs(400); //default gravity speed
     }
@@ -197,7 +230,69 @@ public final class GuiController implements Initializable {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
                 }
             }
+
+            //render ghost under updated active brick
+            renderGhost(brick);
         }
+    }
+
+    // compute where the current brick will land and update ghostPanel layout
+    private void renderGhost(ViewData brick) {
+        if (ghostRectangles == null || displayMatrix == null || brick == null) {
+            return;
+        }
+        int ghostY = computeGhostY(brick);
+        // position ghostPanel: same X as active; Y computed for ghost
+        ghostPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * ghostPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
+        ghostPanel.setLayoutY(-42 + gamePanel.getLayoutY() + ghostY * ghostPanel.getHgap() + ghostY * BRICK_SIZE);
+
+        // update ghost cell colors (in case it rotates / shape changed)
+        for (int i = 0; i < brick.getBrickData().length; i++) {
+            for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+                int v = brick.getBrickData()[i][j];
+                // ghost should only show where the brick has blocks
+                if (v > 0) {
+                    ghostRectangles[i][j].setFill(getFillColor(v));
+                    ghostRectangles[i][j].setOpacity(0.25);
+                } else {
+                    ghostRectangles[i][j].setFill(Color.TRANSPARENT);
+                }
+            }
+        }
+    }
+
+    // find maximum Y where brick can be placed without overlapping visible background
+    private int computeGhostY(ViewData brick) {
+        int[][] shape = brick.getBrickData();
+        int x = brick.getxPosition();
+        int y = brick.getyPosition();
+        int maxRows = displayMatrix.length;
+        int maxCols = displayMatrix[0].length;
+
+        int testY = y;
+        outer:
+        while (true) {
+            int nextY = testY + 1;
+            // check each cell in shape at row = nextY + i
+            for (int i = 0; i < shape.length; i++) {
+                for (int j = 0; j < shape[i].length; j++) {
+                    if (shape[i][j] == 0) continue;
+                    int boardRow = nextY + i;
+                    int boardCol = x + j;
+                    // collision with floor
+                    if (boardRow >= maxRows) {
+                        break outer;
+                    }
+                    // treat null displayMatrix entries as empty (above visible area)
+                    Rectangle backgroundCell = displayMatrix[boardRow][boardCol];
+                    if (backgroundCell != null && !Color.TRANSPARENT.equals(backgroundCell.getFill())) {
+                        break outer;
+                    }
+                }
+            }
+            testY = nextY;
+        }
+        return testY;
     }
 
     //update the game board display
