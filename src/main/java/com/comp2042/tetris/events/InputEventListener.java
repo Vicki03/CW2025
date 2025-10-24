@@ -16,5 +16,10 @@ public interface InputEventListener {
 
     ViewData onRotateEvent(MoveEvent event);
 
+    /**
+     *  Handle the hard drop event (instant drop to bottom when space is pressed)
+     */
+    DownData onHardDropEvent(MoveEvent event);
+
     void createNewGame();
 }
