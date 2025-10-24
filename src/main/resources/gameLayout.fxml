@@ -11,6 +11,7 @@
 <StackPane fx:controller="com.comp2042.tetris.controller.GuiController"
       xmlns:fx="http://javafx.com/fxml"> <!-- Use StackPana when wanna layer components -->
     <Pane>
+        <GridPane fx:id="ghostPanel" vgap="1" hgap="1" mouseTransparent="true"/>
         <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
         <BorderPane styleClass="gameBoard" fx:id="gameBoard">
             <center>
