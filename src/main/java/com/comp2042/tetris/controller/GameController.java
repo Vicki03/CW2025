@@ -29,6 +29,7 @@ public final class GameController implements InputEventListener {
         board.createNewBrick();
         viewGuiController.setEventListener(this);
         viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
+        viewGuiController.showNext(board.getNextViewData());
         viewGuiController.bindScore(board.getScore().scoreProperty());
 
         //set initial gravity and listen for score changes
@@ -64,8 +65,12 @@ public final class GameController implements InputEventListener {
             if (clearRow.getLinesRemoved() > 0) {
                 board.getScore().add(clearRow.getScoreBonus());
             }
-            if (board.createNewBrick()) { //tries to create a new brick, if cant, then game over
+            boolean gameOver = board.createNewBrick();
+            if(gameOver){
                 viewGuiController.gameOver();
+            } else{
+                //update preview to the newly queued next piece
+                viewGuiController.showNext(board.getNextViewData());
             }
 
             viewGuiController.refreshGameBackground(board.getBoardMatrix()); //updates the GUI with new board state
@@ -104,6 +109,9 @@ public final class GameController implements InputEventListener {
 
         if (board.createNewBrick()) {
             viewGuiController.gameOver();
+        } else{
+            //update preview to the newly queued next piece
+            viewGuiController.showNext(board.getNextViewData());
         }
 
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
@@ -134,6 +142,8 @@ public final class GameController implements InputEventListener {
     public void createNewGame() {
         board.newGame();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
+
+        viewGuiController.showNext(board.getNextViewData());
         currentLevel = 1; //reset level tracker
         //reset gravity when a new game starts
         int g = levelService.gravityMsForScore(board.getScore().scoreProperty().get());

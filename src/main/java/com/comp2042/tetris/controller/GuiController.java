@@ -74,6 +74,10 @@ public final class GuiController implements Initializable {
     @FXML
     private Label levelLabel;
 
+    //added nextPanel
+    @FXML
+    private GridPane nextPanel;
+
     //stores rectangles representing game board
     /**Rectangle matrix for the game board display*/
     private Rectangle[][] displayMatrix;
@@ -99,6 +103,10 @@ public final class GuiController implements Initializable {
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
     private int currentLevel = 1;
+
+    private Rectangle[][] nextRectangles;
+    private static final int PREVIEW_CELL = 16;
+    private static final int PREVIEW_SIZE = 4;
 
 
     @Override
@@ -201,6 +209,25 @@ public final class GuiController implements Initializable {
         renderGhost(currentBrickView);
 
         setGravityMs(400); //default gravity speed
+
+        //preview of next block
+        if (nextPanel != null) {
+            nextRectangles = new Rectangle[PREVIEW_SIZE][PREVIEW_SIZE];
+            nextPanel.getChildren().clear();
+            nextPanel.setHgap(1);
+            nextPanel.setVgap(1);
+            for (int r = 0; r < PREVIEW_SIZE; r++) {
+                for (int c = 0; c < PREVIEW_SIZE; c++) {
+                    Rectangle rect = new Rectangle(PREVIEW_CELL, PREVIEW_CELL);
+                    rect.setFill(Color.TRANSPARENT);
+                    rect.setArcWidth(6);
+                    rect.setArcHeight(6);
+                    rect.setMouseTransparent(true);
+                    nextRectangles[r][c] = rect;
+                    nextPanel.add(rect, c, r);
+                }
+            }
+        }
     }
 
     //returns a color based on integer value
@@ -363,6 +390,39 @@ public final class GuiController implements Initializable {
         levelUpPanel.setLayoutY(-50);
         groupNotification.getChildren().add(levelUpPanel);
         levelUpPanel.showScore(groupNotification.getChildren());
+    }
+
+    public void showNext(ViewData next) {
+        if (next == null || nextRectangles == null) return;
+
+        int[][] shape = next.getBrickData();
+        int sRows = shape.length;
+        int sCols = shape[0].length;
+
+        int rowOffset = (PREVIEW_SIZE - sRows) / 2;
+        int colOffset = (PREVIEW_SIZE - sCols) / 2;
+
+        // Clear preview
+        for (int r = 0; r < PREVIEW_SIZE; r++) {
+            for (int c = 0; c < PREVIEW_SIZE; c++) {
+                nextRectangles[r][c].setFill(Color.TRANSPARENT);
+                nextRectangles[r][c].setOpacity(1.0);
+            }
+        }
+
+        // Draw centered shape
+        for (int r = 0; r < sRows; r++) {
+            for (int c = 0; c < sCols; c++) {
+                if (shape[r][c] > 0) {
+                    int pr = r + rowOffset;
+                    int pc = c + colOffset;
+                    if (pr >= 0 && pr < PREVIEW_SIZE && pc >= 0 && pc < PREVIEW_SIZE) {
+                        nextRectangles[pr][pc].setFill(getFillColor(shape[r][c]));
+                        nextRectangles[pr][pc].setOpacity(1.0);
+                    }
+                }
+            }
+        }
     }
 
 

@@ -40,6 +40,14 @@
                    text="Level: 1"
                    style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                   -fx-background-color: rgba(0,0,0,0.35); -fx-padding: 4 8;" />
+            <!-- Preview area for next piece -->
+            <VBox alignment="CENTER" spacing="4" style="-fx-alignment: center;">
+                <Label text="Nest Block:"
+                       style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <GridPane fx:id="nextPanel"
+                          prefWidth="50" prefHeight="80" hgap="1" vgap="1" mouseTransparent="true"
+                          style="-fx-border-color: rgba(255,255,255,0.8); -fx-border-width: 1; -fx-border-radius: 6; -fx-padding: 6; -fx-background-color: rgba(0,0,0,0.12); -fx-background-radius: 6;" />
+            </VBox>
         </VBox>
 
     </HBox>
