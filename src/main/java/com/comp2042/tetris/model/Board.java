@@ -33,4 +33,17 @@ public interface Board {
     default ViewData getNextViewData(){
         return getNextBrickViewData();
     }
+
+    /**
+     * Returns a ViewData describing the currently held block for preview
+     * May return null if nothing is held
+     */
+
+    ViewData getHeldBrickViewData();
+
+    /**
+     * Hold / swap the current falling brick.
+     * Returns true if the resulting spawn/swap caused an immediate collision (i.e., game over).
+     */
+    boolean holdCurrentBrick();
 }

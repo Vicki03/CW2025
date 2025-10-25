@@ -137,6 +137,18 @@ public final class GameController implements InputEventListener {
         return board.getViewData();
     }
 
+    @Override
+    public ViewData onHoldEvent(MoveEvent event) {
+        boolean gameOver = board.holdCurrentBrick();
+        if(gameOver){
+            viewGuiController.gameOver();
+        }else{
+            viewGuiController.showNext(board.getNextViewData());
+        }
+        viewGuiController.showHeld(board.getHeldBrickViewData());
+        return board.getViewData();
+    }
+
 
     @Override
     public void createNewGame() {

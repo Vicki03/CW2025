@@ -20,6 +20,11 @@ public class GameBoard implements Board {
     private final Score score;
     private ViewData nextViewData;
 
+    //hold support
+    private Brick currentBrick;
+    private Brick heldBrick;
+    private boolean holdUsed;
+
     //declares board dimensions, initializes game matrix, brick generator, rotator, and score
     public GameBoard(int width, int height) {
         this.width = width;
@@ -93,9 +98,12 @@ public class GameBoard implements Board {
     @Override
     public boolean createNewBrick() {
         // consume the next brick as the current one
-        Brick currentBrick = brickGenerator.getBrick();
-        brickRotator.setBrick(currentBrick);
+        this.currentBrick = brickGenerator.getBrick();
+        brickRotator.setBrick(this.currentBrick);
         currentOffset = new Point(4, 0);
+
+        //allow hold again for the new spawn
+        holdUsed = false;
 
         // peek the generator for the upcoming brick (do not consume it)
         Brick upcoming = brickGenerator.getNextBrick();
@@ -169,5 +177,40 @@ public class GameBoard implements Board {
     @Override
     public ViewData getNextBrickViewData() {
         return nextViewData;
+    }
+
+    @Override
+    public boolean holdCurrentBrick() {
+        // prevent multiple holds in the same spawn
+        if (holdUsed) return false;
+
+        // If nothing is held, store current and spawn next.
+        if (heldBrick == null) {
+            heldBrick = currentBrick;
+            // spawn next brick (createNewBrick() resets holdUsed to false for normal spawns)
+            boolean gameOver = createNewBrick();
+            // mark hold used for the new current piece (prevent another hold until next spawn)
+            holdUsed = true;
+            return gameOver;
+        } else {
+            // swap held and current
+            Brick temp = heldBrick;
+            heldBrick = currentBrick;
+            currentBrick = temp;
+            brickRotator.setBrick(currentBrick);
+            currentOffset = new Point(4, 0);
+            // mark hold used for this spawn
+            holdUsed = true;
+            // check immediate collision after swap
+            boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+            return conflict;
+        }
+    }
+
+    @Override
+    public ViewData getHeldBrickViewData(){
+        if(heldBrick == null) return null;
+        int[][] previewShape = heldBrick.getShapeMatrix().get(0);
+        return new ViewData(previewShape, 0, 0, previewShape);
     }
 }

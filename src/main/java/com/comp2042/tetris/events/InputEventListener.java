@@ -21,5 +21,10 @@ public interface InputEventListener {
      */
     DownData onHardDropEvent(MoveEvent event);
 
+    /**
+     * Handle hold/swap action
+     */
+    ViewData onHoldEvent(MoveEvent event);
+
     void createNewGame();
 }
