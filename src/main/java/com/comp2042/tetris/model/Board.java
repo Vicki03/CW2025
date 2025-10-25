@@ -23,4 +23,14 @@ public interface Board {
     Score getScore();
 
     void newGame();
+
+    /**
+     * Returns a ViewData describing the queued "next" block for preview
+     * May return null if not available
+     */
+    ViewData getNextBrickViewData();
+
+    default ViewData getNextViewData(){
+        return getNextBrickViewData();
+    }
 }

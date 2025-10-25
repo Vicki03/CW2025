@@ -18,6 +18,7 @@ public class GameBoard implements Board {
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
+    private ViewData nextViewData;
 
     //declares board dimensions, initializes game matrix, brick generator, rotator, and score
     public GameBoard(int width, int height) {
@@ -91,9 +92,21 @@ public class GameBoard implements Board {
     //generates a new brick, sets initial position, checks for collision at starting position
     @Override
     public boolean createNewBrick() {
+        // consume the next brick as the current one
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
         currentOffset = new Point(4, 0);
+
+        // peek the generator for the upcoming brick (do not consume it)
+        Brick upcoming = brickGenerator.getNextBrick();
+        if (upcoming != null) {
+            int[][] previewShape = upcoming.getShapeMatrix().get(0);
+            // construct ViewData for preview; positions don't matter for the small preview panel
+            nextViewData = new ViewData(previewShape, 0, 0, previewShape);
+        } else {
+            nextViewData = null;
+        }
+
         return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
     }
 
@@ -106,7 +119,21 @@ public class GameBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0));
+        //use cached preview data so view and board stay consistent
+        int[][] previewShape = null;
+        if(nextViewData != null){
+            previewShape = nextViewData.getBrickData();
+        }else{
+            Brick peek = brickGenerator.getNextBrick();
+            if(peek != null){
+                previewShape = peek.getShapeMatrix().get(0);
+            }
+        }
+
+        int x = (currentOffset != null) ? (int) currentOffset.getX() : 0;
+        int y = (currentOffset != null) ? (int) currentOffset.getY(): 0;
+
+        return new ViewData(brickRotator.getCurrentShape(), x, y, previewShape);
     }
 
     //merges the current brick into the board matrix
@@ -130,11 +157,17 @@ public class GameBoard implements Board {
     }
 
 
+
     //resets the game state for a new game
     @Override
     public void newGame() {
         currentGameMatrix = new int[width][height];
         score.reset();
         createNewBrick();
+    }
+
+    @Override
+    public ViewData getNextBrickViewData() {
+        return nextViewData;
     }
 }
