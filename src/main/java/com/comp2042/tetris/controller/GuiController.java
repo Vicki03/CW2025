@@ -156,9 +156,6 @@ public final class GuiController implements Initializable {
                     keyEvent.consume();
                 }
             }
-            if (keyEvent.getCode() == KeyCode.N) {
-                newGame(null);
-            }
         });
         //hide replay button at the start
         replayButton.setVisible(false);
