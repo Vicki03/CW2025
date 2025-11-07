@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -55,8 +56,8 @@ public final class GuiController implements Initializable {
     @FXML
     private GridPane ghostPanel;
 
-    @FXML
-    private GameOverPanel gameOverPanel;
+    //@FXML
+    //private GameOverPanel gameOverPanel;
 
     //added replay button
     @FXML
@@ -81,6 +82,12 @@ public final class GuiController implements Initializable {
     //added holdPanel
     @FXML
     private GridPane holdPanel;
+
+    //@FXML remove later
+   // private Rectangle overlayRect;
+
+    @FXML
+    private StackPane gameOverOverlay;
 
     //stores rectangles representing game board
     /**Rectangle matrix for the game board display*/
@@ -160,7 +167,10 @@ public final class GuiController implements Initializable {
         //hide replay button at the start
         replayButton.setVisible(false);
         //hide game over panel in the beginning
-        gameOverPanel.setVisible(false);
+        //gameOverPanel.setVisible(false);
+        gameOverOverlay.setVisible(false);
+        gameOverOverlay.setManaged(false);
+        gameOverOverlay.setViewOrder(-1);
 
         //redundant reflection effect
         final Reflection reflection = new Reflection();
@@ -497,27 +507,52 @@ public final class GuiController implements Initializable {
 
 
     public void gameOver() {
-        timeLine.stop();
-        gameOverPanel.setVisible(true);
-        isGameOver.setValue(Boolean.TRUE);
-        replayButton.setVisible(true); //show replay button when game is over
-        replayButton.setDisable(false); //enable replay button
-        pauseButton.setDisable(true); //disable pause button
+        if (timeLine != null) timeLine.stop();
+
+        isGameOver.set(true);
+        pauseButton.setDisable(true);
+
+        // Show overlay on top
+        gameOverOverlay.setManaged(true);
+        gameOverOverlay.setVisible(true);
+        gameOverOverlay.toFront();
+
+        // Optional fade-in for polish
+        gameOverOverlay.setOpacity(0);
+        javafx.animation.FadeTransition ft =
+                new javafx.animation.FadeTransition(Duration.millis(220), gameOverOverlay);
+        ft.setToValue(1.0);
+        ft.play();
+
+        replayButton.setVisible(true);
+        replayButton.setDisable(false);
     }
+
 
     //implement replay button later
     public void newGame(ActionEvent actionEvent) {
-        timeLine.stop();
-        gameOverPanel.setVisible(false);
-        replayButton.setVisible(false); //hide replay button when starting a new game
-        eventListener.createNewGame(); //reset game state
-        gamePanel.requestFocus();
-        timeLine.play();
-        isPause.setValue(Boolean.FALSE);
-        isGameOver.setValue(Boolean.FALSE);
+        if (timeLine != null) timeLine.stop();
+
+        // Hide overlay
+        gameOverOverlay.setVisible(false);
+        gameOverOverlay.setManaged(false);
+        replayButton.setVisible(false);
+
+        // Reset flags/UI
+        isPause.set(false);
+        isGameOver.set(false);
         pauseButton.setText("Pause");
-        pauseButton.setDisable(false); //enable pause button
+        pauseButton.setDisable(false);
+        groupNotification.getChildren().clear();
+
+        // Reset game state and resume gravity
+        eventListener.createNewGame();
+        if (timeLine != null) timeLine.play();
+
+        gamePanel.requestFocus();
     }
+
+
 
     //implement the pause game feature later
     public void pauseGame(ActionEvent actionEvent) {
