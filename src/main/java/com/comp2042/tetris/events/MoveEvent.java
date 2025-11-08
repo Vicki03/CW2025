@@ -9,6 +9,7 @@ public final class MoveEvent {
         this.eventSource = eventSource;
     }
 
+    @SuppressWarnings("unused")
     public EventType getEventType() {
         return eventType;
     }

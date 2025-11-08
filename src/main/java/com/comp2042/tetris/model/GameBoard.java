@@ -105,14 +105,11 @@ public class GameBoard implements Board {
         //allow hold again for the new spawn
         holdUsed = false;
 
-        // peek the generator for the upcoming brick (do not consume it)
+        // createNewBrick()
         Brick upcoming = brickGenerator.getNextBrick();
         if (upcoming != null) {
-            int[][] previewShape = upcoming.getShapeMatrix().get(0);
-            // construct ViewData for preview; positions don't matter for the small preview panel
+            int[][] previewShape = upcoming.getShapeMatrix().getFirst();  // <-- was get(0)
             nextViewData = new ViewData(previewShape, 0, 0, previewShape);
-        } else {
-            nextViewData = null;
         }
 
         return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
@@ -132,10 +129,12 @@ public class GameBoard implements Board {
         if(nextViewData != null){
             previewShape = nextViewData.getBrickData();
         }else{
+            // getViewData()
             Brick peek = brickGenerator.getNextBrick();
-            if(peek != null){
-                previewShape = peek.getShapeMatrix().get(0);
+            if (peek != null) {
+                previewShape = peek.getShapeMatrix().getFirst();              // <-- was get(0)
             }
+
         }
 
         int x = (currentOffset != null) ? (int) currentOffset.getX() : 0;
@@ -202,15 +201,16 @@ public class GameBoard implements Board {
             // mark hold used for this spawn
             holdUsed = true;
             // check immediate collision after swap
-            boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
-            return conflict;
+            return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(),
+                    (int) currentOffset.getX(), (int) currentOffset.getY());
+
         }
     }
 
     @Override
     public ViewData getHeldBrickViewData(){
         if(heldBrick == null) return null;
-        int[][] previewShape = heldBrick.getShapeMatrix().get(0);
+        int[][] previewShape = heldBrick.getShapeMatrix().getFirst();
         return new ViewData(previewShape, 0, 0, previewShape);
     }
 }

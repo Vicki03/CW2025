@@ -37,7 +37,7 @@ public final class GameController implements InputEventListener {
         int initialGravityMs = levelService.gravityMsForScore(initialScore);
         viewGuiController.setGravityMs(initialGravityMs); // add this method to GuiController
 
-        ChangeListener<Number> scoreListener = (obs, oldVal, newVal) -> {
+        ChangeListener<Number> scoreListener = (_, _, newVal) -> {
             int s = newVal.intValue();
             int g = levelService.gravityMsForScore(s);
             int level = levelService.levelForScore(s);

@@ -4,10 +4,13 @@ public interface Board {
 
     boolean moveBrickDown();
 
+    @SuppressWarnings("UnusedReturnValue")
     boolean moveBrickLeft();
 
+    @SuppressWarnings("UnusedReturnValue")
     boolean moveBrickRight();
 
+    @SuppressWarnings("UnusedReturnValue")
     boolean rotateLeftBrick();
 
     boolean createNewBrick();
