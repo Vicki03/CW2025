@@ -68,21 +68,20 @@
     <StackPane fx:id="gameOverOverlay" visible="false" managed="false" pickOnBounds="true">
         <!-- dim background -->
         <Region style="-fx-background-color: rgba(0,0,0,0.55);"
-                StackPane.alignment="CENTER"
-                prefWidth="Infinity" prefHeight="Infinity" />
+                maxWidth="Infinity" maxHeight="Infinity" />
         <!-- centered modal -->
         <VBox alignment="CENTER" spacing="12" maxWidth="280"
               style="-fx-background-color: rgba(30,30,34,0.95);
-                     -fx-background-radius: 16;
-                     -fx-padding: 22;
-                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35),20,0.2,0,8);"
-              StackPane.alignment="CENTER">
-            <GameOverPanel fx:id="gameOverPanel"/>
+                 -fx-background-radius: 16;
+                 -fx-padding: 22;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35),20,0.2,0,8);">
+            <GameOverPanel/> <!-- remove fx:id if you don't inject it -->
             <Button fx:id="replayButton" text="Replay" onAction="#newGame"
                     style="-fx-background-color:#00d1ff; -fx-text-fill:#111;
-                           -fx-background-radius:10; -fx-font-weight:700; -fx-padding:8 16;" />
+                       -fx-background-radius:10; -fx-font-weight:700; -fx-padding:8 16;" />
         </VBox>
     </StackPane>
+
 
     <stylesheets>
         <URL value="@window_style.css"/>

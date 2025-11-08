@@ -29,6 +29,7 @@ public final class ViewData {
         return yPosition;
     }
 
+    @SuppressWarnings("unused")
     public int[][] getNextBrickData() {
         return MatrixOperations.copy(nextBrickData);
     }
