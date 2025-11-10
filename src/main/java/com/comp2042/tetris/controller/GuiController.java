@@ -39,6 +39,7 @@ import javafx.scene.control.Label;
 //shows notifs for scoring, controls game over and new game states
 public final class GuiController implements Initializable {
 
+    /** Cell size (in pixels) for the on-screen brick rectangles. */
     private static final int BRICK_SIZE = 20;
 
     @FXML
@@ -50,37 +51,42 @@ public final class GuiController implements Initializable {
     @FXML
     private GridPane brickPanel;
 
+    /** Ghost layer panel (rendered behind active brick). */
     //ghost layer (behind active brick)
     @FXML
     private GridPane ghostPanel;
 
+    /** Replay button (shown on game over). */
     //added replay button
     @FXML
     private Button replayButton;
 
+    /** Pause/resume button. */
     //added pause button
     @FXML
     private Button pauseButton;
 
+    /** Score text label. */
     //added scoreLabel
     @FXML
     private Label scoreLabel;
 
+    /** Level text label. */
     //added levelLabel
     @FXML
     private Label levelLabel;
 
+    /** 4×4 grid preview for the next piece. */
     //added nextPanel
     @FXML
     private GridPane nextPanel;
 
+    /** 4×4 grid preview for the held piece. */
     //added holdPanel
     @FXML
     private GridPane holdPanel;
 
-    //@FXML remove later
-   // private Rectangle overlayRect;
-
+    /** Game-over overlay pane. */
     @FXML
     private StackPane gameOverOverlay;
 
@@ -106,14 +112,22 @@ public final class GuiController implements Initializable {
     /** UI state flags. */
     private final BooleanProperty isPause = new SimpleBooleanProperty();
 
+    /** UI state: game-over flag. */
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
+    /** Cells for next/held previews. */
     private Rectangle[][] nextRectangles;
     private Rectangle[][] holdRectangles;
+
+    /** Preview grid parameters. */
     private static final int PREVIEW_CELL = 16;
     private static final int PREVIEW_SIZE = 4;
 
 
+    /**
+     * JavaFX lifecycle hook. Loads custom font, wires key handlers,
+     * initializes UI defaults, and hides the game-over overlay.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         URL fontUrl = getClass().getClassLoader().getResource("digital.ttf");
@@ -174,6 +188,13 @@ public final class GuiController implements Initializable {
         reflection.setTopOffset(-12);
     }
 
+    /**
+     * Initializes the on-screen board, active/ghost brick layers, default gravity,
+     * and the next/held preview grids.
+     *
+     * @param boardMatrix initial background matrix (with hidden top rows)
+     * @param brick       initial active brick view
+     */
     //initializes game board and current brick display
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
@@ -193,6 +214,7 @@ public final class GuiController implements Initializable {
                 ghostPanel,
                 true);
 
+        //active layer
         rectangles = createBrickLayer(
                 brick.getBrickData().length,
                 brick.getBrickData()[0].length,
@@ -212,6 +234,12 @@ public final class GuiController implements Initializable {
         if (holdPanel != null) holdRectangles = initPreviewGrid(holdPanel);
     }
 
+    /**
+     * Resolves a UI color for a tile value.
+     *
+     * @param i tile value (0 for transparent, &gt;0 for colored)
+     * @return the fill paint for the given value
+     */
     //returns a color based on integer value
     private Paint getFillColor(int i) {
         return switch (i) {
@@ -228,7 +256,11 @@ public final class GuiController implements Initializable {
     }
 
 
-
+    /**
+     * Repaints active and ghost layers and repositions panels for the given brick view.
+     *
+     * @param brick the current active brick view to render
+     */
     //update the brick's position and color in the UI
     private void refreshBrick(ViewData brick) {
         paintBrickLayer(rectangles, brick.getBrickData(), false);
@@ -237,11 +269,23 @@ public final class GuiController implements Initializable {
 
     }
 
+    /**
+     * Renders the ghost layer based on the current active brick.
+     *
+     * @param brick the current active brick view
+     */
     // compute where the current brick will land and update ghostPanel layout
     private void renderGhost(ViewData brick) {
         paintBrickLayer(ghostRectangles, brick.getBrickData(), true);
     }
 
+    /**
+     * Computes the Y row where the brick would land if dropped straight down,
+     * without overlapping existing non-transparent background cells.
+     *
+     * @param brick the current active brick view
+     * @return landing Y position (row index in the board)
+     */
     // find maximum Y where brick can be placed without overlapping visible background
     private int computeGhostY(ViewData brick) {
         int[][] shape = brick.getBrickData();
@@ -275,6 +319,11 @@ public final class GuiController implements Initializable {
         return testY;
     }
 
+    /**
+     * Updates the visible board background from the given matrix.
+     *
+     * @param board the full board state (including hidden rows)
+     */
     //update the game board display
     public void refreshGameBackground(int[][] board) {
         for (int i = 2; i < board.length; i++) {
@@ -284,6 +333,12 @@ public final class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Styles a single background cell: fill color and rounded corners.
+     *
+     * @param color     tile value to map to color
+     * @param rectangle the rectangle to style
+     */
     //set the color and rounded corners of a rectangle
     private void setRectangleData(int color, Rectangle rectangle) {
         rectangle.setFill(getFillColor(color));
@@ -291,6 +346,12 @@ public final class GuiController implements Initializable {
         rectangle.setArcWidth(9);
     }
 
+    /**
+     * Performs a single down step (timer tick or user action), shows score bonus if any,
+     * and repaints the active/ghost layers.
+     *
+     * @param event the DOWN move event (thread or user)
+     */
     //handles the moving brick down
     private void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
@@ -301,12 +362,22 @@ public final class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
 
+    /**
+     * Injects the game logic listener that will receive input events.
+     *
+     * @param eventListener the listener to notify on user/timer input
+     */
     //sets event listener for game logic
     public void setEventListener(InputEventListener eventListener) {
         this.eventListener = eventListener;
     }
 
-    //I think this connects to the game score and then updates the score automatically in the ui
+    /**
+     * Binds the score label to the provided observable property.
+     *
+     * @param integerProperty the observable score value
+     */
+    //this connects to the game score and then updates the score automatically in the ui
     public void bindScore(IntegerProperty integerProperty) {
         if (integerProperty == null || scoreLabel == null){
             return;
@@ -314,6 +385,11 @@ public final class GuiController implements Initializable {
         scoreLabel.textProperty().bind(integerProperty.asString("Score: %d"));
     }
 
+    /**
+     * Sets the gravity interval (milliseconds between automatic DOWN steps).
+     *
+     * @param ms gravity interval in milliseconds
+     */
     //change speed of the piece drops
     public void setGravityMs(int ms){
         if(timeLine != null){
@@ -328,6 +404,11 @@ public final class GuiController implements Initializable {
         timeLine.play();
     }
 
+    /**
+     * Displays the current level text in the UI.
+     *
+     * @param level the level number to show
+     */
     //displays the current level in the ui
     public void showLevel(int level) {
         if (levelLabel != null) {
@@ -335,6 +416,11 @@ public final class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Shows a brief animated notification for a level-up event.
+     *
+     * @param newLevel the new level reached
+     */
     public void showLevelUpNotification(int newLevel) {
         NotificationPanel levelUpPanel = new NotificationPanel("LEVEL " + newLevel + "!");
         levelUpPanel.setLayoutY(-50);
@@ -342,12 +428,22 @@ public final class GuiController implements Initializable {
         levelUpPanel.showScore(groupNotification.getChildren());
     }
 
+    /**
+     * Updates the “next” preview to reflect the upcoming piece.
+     *
+     * @param next the next piece view, or {@code null} to clear
+     */
     public void showNext(ViewData next) {
         if (nextRectangles == null) return;
         if (next == null) { clearPreview(nextRectangles); return; }
         drawPreviewCentered(nextRectangles, next.getBrickData());
     }
 
+    /**
+     * Updates the “held” preview to reflect the currently held piece.
+     *
+     * @param held the held piece view, or {@code null} to clear
+     */
     public void showHeld(ViewData held) {
         if (holdRectangles == null) return;
         if (held == null) { clearPreview(holdRectangles); return; }
@@ -355,6 +451,10 @@ public final class GuiController implements Initializable {
     }
 
 
+    /**
+     * Transitions the UI into game-over state: stops gravity, shows overlay,
+     * enables replay, and plays a quick fade-in.
+     */
     public void gameOver() {
         if (timeLine != null) timeLine.stop();
 
@@ -378,6 +478,10 @@ public final class GuiController implements Initializable {
     }
 
 
+    /**
+     * Starts a fresh game session: hides overlay, clears notifications and flags,
+     * resets pause button label, notifies the model, and resumes gravity.
+     */
     //implement replay button later
     public void newGame() {
         if (timeLine != null) timeLine.stop();
@@ -403,6 +507,10 @@ public final class GuiController implements Initializable {
 
 
 
+    /**
+     * Toggles between paused and running states (disabled in game-over).
+     * Updates the pause button label accordingly.
+     */
     //implement the pause game feature later
     public void pauseGame() {
         gamePanel.requestFocus();
@@ -424,7 +532,13 @@ public final class GuiController implements Initializable {
     }
 
     /**
-     * Creates a 2D Rectangle grid for either the active or ghost brick layer.
+     * Creates a 2D {@link Rectangle} grid for an active or ghost brick layer.
+     *
+     * @param rows   number of rows in the brick shape
+     * @param cols   number of columns in the brick shape
+     * @param target the {@link GridPane} to populate
+     * @param ghost  whether this layer represents the ghost brick
+     * @return the created rectangle grid for this layer
      */
     private Rectangle[][] createBrickLayer(int rows, int cols, GridPane target, boolean ghost) {
         Rectangle[][] layer = new Rectangle[rows][cols];
@@ -446,7 +560,11 @@ public final class GuiController implements Initializable {
     }
 
     /**
-     * Updates a Rectangle grid's colors based on the brick data.
+     * Updates a rectangle grid from a brick shape matrix.
+     *
+     * @param layer rectangle layer (active or ghost)
+     * @param data  brick shape matrix
+     * @param ghost true if painting the ghost layer; affects opacity handling
      */
     private void paintBrickLayer(Rectangle[][] layer, int[][] data, boolean ghost) {
         for (int r = 0; r < data.length; r++) {
@@ -464,7 +582,10 @@ public final class GuiController implements Initializable {
     }
 
     /**
-     * Initializes a 4x4 preview grid (used for next/held block displays).
+     * Builds a 4×4 preview grid (used for next/held panels).
+     *
+     * @param panel the target preview panel
+     * @return a new 4×4 rectangle grid
      */
     private Rectangle[][] initPreviewGrid(GridPane panel) {
         Rectangle[][] grid = new Rectangle[PREVIEW_SIZE][PREVIEW_SIZE];
@@ -486,7 +607,9 @@ public final class GuiController implements Initializable {
     }
 
     /**
-     * Clears all cells in a preview grid to transparent.
+     * Clears all cells in a preview grid to transparent/visible.
+     *
+     * @param grid the preview grid to clear
      */
     private void clearPreview(Rectangle[][] grid) {
         for (int r = 0; r < PREVIEW_SIZE; r++) {
@@ -498,7 +621,10 @@ public final class GuiController implements Initializable {
     }
 
     /**
-     * Draws a centered block shape in the preview grid.
+     * Draws a brick shape centered in the 4×4 preview grid.
+     *
+     * @param grid  the preview grid
+     * @param shape the brick shape matrix
      */
     private void drawPreviewCentered(Rectangle[][] grid, int[][] shape) {
         clearPreview(grid);
@@ -518,7 +644,11 @@ public final class GuiController implements Initializable {
         }
     }
 
-    /** Positions the active brick panel and the ghost panel based on the given brick view. */
+    /**
+     * Repositions the active and ghost panels based on the active brick view.
+     *
+     * @param brick the current active brick view
+     */
     private void updatePanelsPosition(ViewData brick) {
         if (brick == null) return;
 
@@ -540,7 +670,11 @@ public final class GuiController implements Initializable {
         );
     }
 
-    /** Shows the +score bonus notification if any lines were cleared. */
+    /**
+     * Shows a floating score bonus notification if lines were cleared on the last step.
+     *
+     * @param data the result of the last down/hard drop step
+     */
     private void showScoreBonus(DownData data) {
         if (data != null && data.getClearRow() != null && data.getClearRow().getLinesRemoved() > 0) {
             NotificationPanel p = new NotificationPanel("+" + data.getClearRow().getScoreBonus());

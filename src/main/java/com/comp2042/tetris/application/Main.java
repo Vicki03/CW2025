@@ -8,9 +8,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Entry point for the tetris application
+ * this class initializes the JavaFX environment, loads hte FXML layout,
+ * connects the GUI controller to the game controller, and launches the
+ * game window.
+ *
+ */
 
 public class Main extends Application {
 
+    /**
+     * Starts the TetrisFJX application.
+     *
+     * @throws Exception if the FXML file cannot be loaded
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -29,6 +41,10 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Launches the JavaFX application
+     * @param args command line arguments passed at runtime
+     */
 
     public static void main(String[] args) {
         launch(args);
