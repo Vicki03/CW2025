@@ -26,7 +26,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gameLayout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/comp2042/tetris/view/gameLayout.fxml"));
         Parent root = loader.load();
 
         GuiController guiController = loader.getController();
@@ -45,7 +45,6 @@ public class Main extends Application {
      * Launches the JavaFX application
      * @param args command line arguments passed at runtime
      */
-
     public static void main(String[] args) {
         launch(args);
     }

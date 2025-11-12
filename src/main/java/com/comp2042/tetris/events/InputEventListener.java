@@ -21,9 +21,6 @@ import com.comp2042.tetris.model.DownData;
  *     <li>Translate key actions (left, right, down, rotate, hard drop, hold) into model updates.</li>
  *     <li>Support starting new game sessions via {@link #createNewGame()}.</li>
  * </ul>
- *
- * @author Your Name
- * @version 1.0
  */
 public interface InputEventListener {
 

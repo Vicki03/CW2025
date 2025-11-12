@@ -372,6 +372,11 @@ public final class GuiController implements Initializable {
         this.eventListener = eventListener;
     }
 
+    /** Expose paused state for tests (read-only). */
+    public boolean isPaused() {
+        return isPause.get();
+    }
+
     /**
      * Binds the score label to the provided observable property.
      *
