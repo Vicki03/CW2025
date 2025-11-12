@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>23</maven.compiler.release>
         <javafx.version>23.0.1</javafx.version>
+
         <junit.version>5.12.1</junit.version>
         <testfx.version>4.0.16-alpha</testfx.version>
         <monocle.version>jdk-12.0.1+2</monocle.version>
@@ -47,17 +48,22 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- TestFX for JavaFX UI tests (JUnit 5 integration) -->
+        <!-- TestFX (needed for your existing GuiController* tests) -->
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-core</artifactId>
+            <version>${testfx.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit5</artifactId>
             <version>${testfx.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
-    <!-- Repositories to resolve TestFX/Monocle if not in Maven Central -->
+    <!-- Repos so Maven can resolve TestFX -->
     <repositories>
         <repository>
             <id>oss.sonatype.org-releases</id>
@@ -71,7 +77,7 @@
 
     <build>
         <plugins>
-            <!-- JavaFX Maven plugin -->
+            <!-- JavaFX run plugin (for your app) -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -81,7 +87,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Java compiler plugin -->
+            <!-- Java compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -91,19 +97,59 @@
                 </configuration>
             </plugin>
 
-            <!-- Surefire for running JUnit 5 tests (headless JavaFX/TestFX support) -->
+            <!-- Surefire for JUnit 5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.plugin.version}</version>
                 <configuration>
+                    <!-- Keep tests on classpath (avoid JPMS headaches with JDK 23) -->
                     <useModulePath>false</useModulePath>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.extensions.autodetection.enabled=true
+                        </configurationParameters>
+                    </properties>
+                    <!-- Optional: use software pipeline for JavaFX rendering -->
                     <systemPropertyVariables>
                         <prism.order>sw</prism.order>
-                        <!-- removed: testfx.headless / java.awt.headless -->
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <!-- Optional: headless profile for CI (adds Monocle + headless props) -->
+    <profiles>
+        <profile>
+            <id>headless</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.testfx</groupId>
+                    <artifactId>openjfx-monocle</artifactId>
+                    <version>${monocle.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire.plugin.version}</version>
+                        <configuration>
+                            <useModulePath>false</useModulePath>
+                            <systemPropertyVariables>
+                                <testfx.headless>true</testfx.headless>
+                                <glass.platform>Monocle</glass.platform>
+                                <monocle.platform>Headless</monocle.platform>
+                                <prism.order>sw</prism.order>
+                                <java.awt.headless>true</java.awt.headless>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
