@@ -1,10 +1,8 @@
-// src/test/java/com/comp2042/tetris/model/GameHoldFeatureTest.java
 package com.comp2042.tetris.model;
 
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.*;
-import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -100,28 +98,27 @@ class GameBoardHoldTest {
     private String extractTypeString(Object brickOrView) throws Exception {
         if (brickOrView == null) return "NULL";
 
-        // 1) Try well-known methods on this object
+
         for (String tm : TYPE_METHODS) {
             Object v = tryCall(brickOrView, tm);
             if (v != null) return normalizeTypeValue(v);
         }
 
-        // 2) Check fields directly
+
         for (String tf : TYPE_FIELDS) {
             Object v = tryField(brickOrView, tf);
             if (v != null) return normalizeTypeValue(v);
         }
 
-        // 3) If this looks like a ViewData wrapper, try to unwrap: getBrick/getPiece
         Object inner = tryCall(brickOrView, "getBrick");
         if (inner == null) inner = tryCall(brickOrView, "getPiece");
         if (inner != null) return extractTypeString(inner);
 
-        // 4) As a rescue: scan for any enum-like field/getter and use its name
+
         String enumName = findAnyEnumName(brickOrView);
         if (enumName != null) return enumName;
 
-        // 5) Fallback
+
         return "FALLBACK:" + brickOrView.getClass().getName() + ":" + brickOrView.toString();
     }
 
@@ -180,7 +177,7 @@ class GameBoardHoldTest {
         return null;
     }
 
-    /* ===================== Tests ===================== */
+//tests
 
     @Test
     void firstHold_movesCurrentIntoHold_andSpawnsNext_andDisablesSecondHold() throws Exception {
