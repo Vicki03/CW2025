@@ -1,3 +1,4 @@
+// java
 package com.comp2042.tetris.model;
 
 import com.comp2042.tetris.model.brick.Brick;
@@ -65,6 +66,9 @@ public class GameBoard implements Board {
     /** True after a hold has been used for the current spawn (enforces 1 hold per spawn). */
     private boolean holdUsed;
 
+    // new flag for tests/UI to observe game-over state
+    private boolean gameOver = false;
+
     /**
      * Creates a new {@code GameBoard} with the specified dimensions and default subsystems.
      *
@@ -79,6 +83,24 @@ public class GameBoard implements Board {
         brickGenerator = new RandomBrickGenerator();
         brickRotator = new BrickRotator();
         score = new Score();
+    }
+
+    /**
+     * Public accessor used by tests and UI.
+     *
+     * @return true if game is over
+     */
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    /**
+     * Additional getter name in case tests look for getGameOver()
+     *
+     * @return true if game is over
+     */
+    public boolean getGameOver() {
+        return gameOver;
     }
 
     /**
@@ -188,7 +210,9 @@ public class GameBoard implements Board {
             nextViewData = new ViewData(previewShape, 0, 0, previewShape);
         }
 
-        return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        this.gameOver = conflict;
+        return conflict;
     }
 
 
@@ -274,6 +298,7 @@ public class GameBoard implements Board {
     public void newGame() {
         currentGameMatrix = new int[width][height];
         score.reset();
+        this.gameOver = false;
         createNewBrick();
     }
 
@@ -320,9 +345,10 @@ public class GameBoard implements Board {
             // mark hold used for this spawn
             holdUsed = true;
             // check immediate collision after swap
-            return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(),
+            boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(),
                     (int) currentOffset.getX(), (int) currentOffset.getY());
-
+            if (conflict) this.gameOver = true;
+            return conflict;
         }
     }
 
