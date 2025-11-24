@@ -377,7 +377,6 @@ public class GameBoard implements Board {
      *           update any UI; those responsibilities belong to the caller.
      */
     public void resetForNewGame() {
-        // clear playfield (replace with your board dimensions/initialization)
         this.currentGameMatrix = new int[width][height];
 
         // reset score / flags
