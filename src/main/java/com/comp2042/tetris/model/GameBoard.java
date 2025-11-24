@@ -299,6 +299,7 @@ public class GameBoard implements Board {
         currentGameMatrix = new int[width][height];
         score.reset();
         this.gameOver = false;
+        resetForNewGame();
         createNewBrick();
     }
 
@@ -362,5 +363,34 @@ public class GameBoard implements Board {
         if(heldBrick == null) return null;
         int[][] previewShape = heldBrick.getShapeMatrix().getFirst();
         return new ViewData(previewShape, 0, 0, previewShape);
+    }
+
+    /**
+     * Reset per-game state to a clean baseline before starting a new game.
+     *
+     * <p>This clears the playfield matrix, resets the score and the {@code gameOver}
+     * flag, removes any active/preview bricks and offsets, and clears the hold slot
+     * so the hold preview is empty. After calling this method you typically call
+     * {@link #createNewBrick()} to spawn the first piece for the new game.</p>
+     *
+     * @implNote This method only resets per-game state. It does not start timers or
+     *           update any UI; those responsibilities belong to the caller.
+     */
+    public void resetForNewGame() {
+        // clear playfield (replace with your board dimensions/initialization)
+        this.currentGameMatrix = new int[width][height];
+
+        // reset score / flags
+        if (this.score != null) this.score.reset();
+        this.gameOver = false;
+
+        // clear active / preview
+        this.currentBrick = null;
+        this.currentOffset = null;
+        this.nextViewData = null;
+
+        //clear hold state so new game starts with empty hold
+        this.heldBrick = null;
+        this.holdUsed = false;
     }
 }

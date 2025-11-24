@@ -505,6 +505,8 @@ public final class GuiController implements Initializable {
 
         // Reset game state and resume gravity
         eventListener.createNewGame();
+
+        showHeld(null);
         if (timeLine != null) timeLine.play();
 
         gamePanel.requestFocus();
