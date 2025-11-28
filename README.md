@@ -24,8 +24,6 @@ https://github.com/Vicki03/CW2025
 
 ---
 
----
-
 ## Implemented and Working Properly
 - Pause and Resume Feature: Allows the game to be paused and resumed using a button.
 - Replay Function: Enables restarting the game after it ends.
