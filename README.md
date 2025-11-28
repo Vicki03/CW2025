@@ -6,17 +6,23 @@ https://github.com/Vicki03/CW2025
 ---
 
 ## Compilation Instructions
-1. Clone or download the project from the GitHub repository.
-2. Open the project in IntelliJ IDEA (or any JavaFX-supported IDE).
-3. Ensure the following settings:
-    - **JDK Version:** 23
-    - **JavaFX SDK:** correctly linked under Run Configuration using:
+1. Clone or download the project from the GitHub repository.  
+2. Open the project in IntelliJ IDEA (or any JavaFX-supported IDE).  
+3. **If Maven does not load automatically**, manually import it:  
+   - Right-click **`pom.xml` → “Add as Maven Project”**  
+   - Wait for IntelliJ to download all dependencies.  
+   - This step may be needed if IntelliJ does not auto-detect the Maven configuration.  
+4. Ensure the following settings:  
+    - **JDK Version:** 23  
+    - **JavaFX SDK:** correctly linked under Run Configuration using:  
       ```
       --module-path "path/to/javafx-sdk-25/lib" --add-modules javafx.controls,javafx.fxml
       ```  
-    - If using **Maven**, dependencies are already defined in the `pom.xml` file.
-4. Run the program using the Main class:  
+    - Maven dependencies are already defined in the `pom.xml` file.  
+5. Run the program using the Main class:  
    `com.comp2042.Main`
+
+---
 
 ---
 
